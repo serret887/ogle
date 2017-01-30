@@ -36,7 +36,7 @@ var _ = Describe("Ogle", func() {
 		})
 		It("Return all the text of the HTML", func() {
 			actual := ogle.GetText(strings.NewReader(htmlTest1))
-			expected := "\ntest HTML\nWhat'saaap"
+			expected := "\n test HTML\n  What'saaap"
 			Expect(expected).To(BeEquivalentTo(actual), "the html should be pretty")
 		})
 	})

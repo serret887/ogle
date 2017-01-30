@@ -71,7 +71,8 @@ func writeToBuffer(b *bytes.Buffer, tabs int, t html.Token) *bytes.Buffer {
 	s := t.String()
 	s = strings.Replace(s, "\n", "", -1)
 	s = strings.Replace(s, "\t", "", -1)
-	s = strings.Replace(s, " ", "", -1)
+	//	s = strings.Replace(s, " ", "", -1)
+	s = html.UnescapeString(s)
 	if len(s) < 1 {
 		fmt.Print("going out")
 		return b
@@ -79,5 +80,6 @@ func writeToBuffer(b *bytes.Buffer, tabs int, t html.Token) *bytes.Buffer {
 	b.WriteString("\n")
 	b.WriteString(strings.Repeat("  ", tabs))
 	b.WriteString(s)
+
 	return b
 }
