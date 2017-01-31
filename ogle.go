@@ -2,7 +2,6 @@ package ogle
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"strings"
 
@@ -69,12 +68,9 @@ func GetText(page io.Reader) string {
 
 func writeToBuffer(b *bytes.Buffer, tabs int, t html.Token) *bytes.Buffer {
 	s := t.String()
-	s = strings.Replace(s, "\n", "", -1)
-	s = strings.Replace(s, "\t", "", -1)
-	//	s = strings.Replace(s, " ", "", -1)
+	s = cleanInitialNonWordChar(s)
 	s = html.UnescapeString(s)
 	if len(s) < 1 {
-		fmt.Print("going out")
 		return b
 	}
 	b.WriteString("\n")
@@ -82,4 +78,19 @@ func writeToBuffer(b *bytes.Buffer, tabs int, t html.Token) *bytes.Buffer {
 	b.WriteString(s)
 
 	return b
+}
+
+func cleanInitialNonWordChar(s string) string {
+	if len(s) < 1 {
+		return s
+	}
+	var init int
+	for i, v := range s {
+		if v == ' ' || v == '\n' || v == '\t' {
+			init++
+			continue
+		}
+		return s[i:]
+	}
+	return s[init:]
 }

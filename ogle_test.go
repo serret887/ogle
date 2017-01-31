@@ -17,7 +17,7 @@ const htmlTest1 = `
     <div class="dog">
       <div class="container">
         <div class="red dog">
-What'saaap
+What'saaap man
         </div>
       </div>
     </div>
@@ -36,8 +36,8 @@ var _ = Describe("Ogle", func() {
 		})
 		It("Return all the text of the HTML", func() {
 			actual := ogle.GetText(strings.NewReader(htmlTest1))
-			expected := "\n test HTML\n  What'saaap"
-			Expect(expected).To(BeEquivalentTo(actual), "the html should be pretty")
+			expected := "\ntest HTML \nWhat'saaap man\n        "
+			Expect(expected).To(BeEquivalentTo(actual), "The function should return all the text")
 		})
 	})
 
