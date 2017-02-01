@@ -4,7 +4,7 @@ workspace:
 
 pipeline:
   build:
-    image: golang
+    image: .
     commands:
       - go get
       - go build
