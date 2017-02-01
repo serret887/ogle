@@ -2,7 +2,6 @@ package ogle
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"strings"
 
@@ -52,7 +51,6 @@ func Pretty(page io.Reader) *bytes.Buffer {
 //GetText will give all the text in the document removing
 //all the tags in the web page
 func GetText(page io.Reader) string {
-	fmt.Print("get Text")
 	token := html.NewTokenizer(page)
 	buffer := &bytes.Buffer{}
 	for {
@@ -70,7 +68,7 @@ func GetText(page io.Reader) string {
 
 func writeToBuffer(b *bytes.Buffer, tabs int, t html.Token) *bytes.Buffer {
 	s := t.String()
-  s = cleanInitialNonWordChar(s)
+	s = cleanInitialNonWordChar(s)
 	s = html.UnescapeString(s)
 	if len(s) < 1 {
 		return b
@@ -82,13 +80,13 @@ func writeToBuffer(b *bytes.Buffer, tabs int, t html.Token) *bytes.Buffer {
 	return b
 }
 
-func cleanInitialNonWordChar(s string)string{
-	if len(s)<1{
+func cleanInitialNonWordChar(s string) string {
+	if len(s) < 1 {
 		return s
 	}
-	var init  int
-	for i,v:= range s{
-		if v == ' '|| v == '\n' || v == '\t'{
+	var init int
+	for i, v := range s {
+		if v == ' ' || v == '\n' || v == '\t' {
 			init++
 			continue
 		}
