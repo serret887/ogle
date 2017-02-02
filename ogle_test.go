@@ -5,7 +5,7 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-  	"github.com/serret887/ogle"
+	"github.com/serret887/ogle"
 )
 
 const htmlTest1 = `

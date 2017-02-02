@@ -8,6 +8,9 @@ import (
 	"golang.org/x/net/html"
 )
 
+// Ogle is a high level scraper build on top of the
+// HTML go parser it allow you to find nodes with tags, classes
+// and using regular expresions for the content text
 type Ogle struct {
 	*html.Node
 }

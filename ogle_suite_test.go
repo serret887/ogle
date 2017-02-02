@@ -10,4 +10,5 @@ import (
 func TestOgle(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Ogle Suite")
+	RunSpecs(t, "Matcher Suite")
 }
