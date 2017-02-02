@@ -3,6 +3,8 @@ package matcher
 import (
 	"fmt"
 
+	"strings"
+
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -56,14 +58,13 @@ func NewByTag(a atom.Atom) *Filter {
 // NewWithClass match any tag with a class with a stringis a constructor
 // that return a filter that going to match if the node
 // pass to the match method implemet the specify class
-func NewWithClass(class string) *Filter {
+func NewWithClass(value string) *Filter {
 	f := &baseFilter{}
-	f.name = "class " + class
+	f.name = "class " + value
 	f.MatchFunc = func(node *html.Node) bool {
 		fmt.Print(node.FirstChild)
 		for _, v := range node.Attr {
-			fmt.Print(v)
-			if class == v.Key {
+			if "class" == v.Key && strings.Contains(v.Val, value) {
 				return true
 			}
 		}

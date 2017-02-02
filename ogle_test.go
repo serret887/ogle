@@ -1,6 +1,7 @@
 package ogle_test
 
 import (
+	"fmt"
 	"strings"
 
 	. "github.com/onsi/ginkgo"
@@ -17,12 +18,13 @@ const htmlTest1 = `
     <div class="dog">
       <div class="container">
         <div class="red dog">
-What'saaap man
+<a class="dog">What'saaap man</a>
         </div>
       </div>
     </div>
   </body>
 </html>
+
 
 
 `
@@ -38,7 +40,10 @@ var _ = Describe("Ogle", func() {
 		})
 		It("Return all the text of the HTML", func() {
 			actual := ogle.GetText(strings.NewReader(htmlTest1))
-			expected := "\ntest HTML \nWhat'saaap man\n        "
+			expected := "\ntest HTML \nWhat'saaap man"
+			fmt.Println()
+			fmt.Printf("% x\n", actual)
+			fmt.Printf("% x\n", expected)
 			Expect(expected).To(BeEquivalentTo(actual), "The function should return all the text")
 		})
 	})
