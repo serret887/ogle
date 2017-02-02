@@ -11,4 +11,5 @@ pipeline:
       - go get github.com/onsi/gomega
       - go get
       - go build
-      - go test
+      - go vet
+      -  ginkgo -r --randomizeAllSpecs --randomizeSuites --failOnPending --cover --trace --race --progress
