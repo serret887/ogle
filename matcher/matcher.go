@@ -7,40 +7,59 @@ import (
 	"golang.org/x/net/html/atom"
 )
 
-// Match is the signature of a matcher
+// MatchFunc is the signature of a matcher
 // entering a node and returning true if this node match
-// the proper patter
-type Match func(*html.Node) bool
+// the proper pattern
+type MatchFunc func(*html.Node) bool
+
+// Matcher is the proper matcher interface if you want to create
+// a custom matcher you should implent this interface
+type Matcher interface {
+	Match(*html.Node) bool
+}
+
+type baseFilter struct {
+	name string
+	MatchFunc
+}
 
 // Filter corresponding to the type of search that
-// you want to do  is importatn to know that all this filters can
+// you want to do  is important to know that all this filters can
 // be reuse in any time
 type Filter struct {
-	name string
-	Match
+	*baseFilter
+}
+
+// Match is the implemetation of the Matcher interface
+func (f *Filter) Match(n *html.Node) bool {
+	return f.MatchFunc(n)
+}
+
+func (f *Filter) Error() string {
+	return fmt.Sprint(f.name)
 }
 
 // NewByTag is a constructor for creating a filter that going to
 // filter anything containing the corresponding atom tag
 func NewByTag(a atom.Atom) *Filter {
-	f := &Filter{}
-	f.name = "tag" + a.String()
-	f.Match = func(node *html.Node) bool {
+	f := &baseFilter{}
+	f.name = "tag " + a.String()
+	f.MatchFunc = func(node *html.Node) bool {
 		if node.DataAtom == a {
 			return true
 		}
 		return false
 	}
-	return f
+	return &Filter{f}
 }
 
 // NewWithClass match any tag with a class with a stringis a constructor
 // that return a filter that going to match if the node
 // pass to the match method implemet the specify class
 func NewWithClass(class string) *Filter {
-	f := &Filter{}
-	f.name = "class" + class
-	f.Match = func(node *html.Node) bool {
+	f := &baseFilter{}
+	f.name = "class " + class
+	f.MatchFunc = func(node *html.Node) bool {
 		fmt.Print(node.FirstChild)
 		for _, v := range node.Attr {
 			fmt.Print(v)
@@ -50,5 +69,5 @@ func NewWithClass(class string) *Filter {
 		}
 		return false
 	}
-	return f
+	return &Filter{f}
 }

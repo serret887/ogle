@@ -19,9 +19,19 @@ var _ = Describe("Finders", func() {
 				panic(err)
 			}
 			m := matcher.NewByTag(atom.A)
-			actual, err := o.Find(m.Match)
+			actual, err := o.Find(m)
 			Expect(actual).To(BeNil())
-			Expect("There are no tag " + atom.A.String()).To(BeEquivalentTo(err.Error()))
+			Expect("Problems Finding tag " + atom.A.String()).To(BeEquivalentTo(err.Error()))
+		})
+		FIt("Return all the nodes with the <div> tag", func() {
+			o, err := ogle.New(strings.NewReader(htmlTest1))
+			if err != nil {
+				panic(err)
+			}
+			m := matcher.NewByTag(atom.Div)
+			actual, err := o.Find(m)
+			Expect(err).To(BeNil())
+			Expect(len(actual)).To(Equal(3), "the amount of div should be 3")
 		})
 	})
 
