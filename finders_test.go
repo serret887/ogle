@@ -8,10 +8,22 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/serret887/ogle/matcher"
+	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
 
+type myCustomTag struct {
+	//a lot of different methods
+}
+
+func (m *myCustomTag) Match(node *html.Node) bool {
+	return true
+}
+
 var _ = Describe("Finders", func() {
+	Context("I can pass any object that implement the Matcher interface", func() {
+
+	})
 	Context("Find all the nodes with an specific MATCHER", func() {
 		o, err := ogle.New(strings.NewReader(htmlTest1))
 		if err != nil {
