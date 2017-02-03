@@ -71,3 +71,20 @@ func NewWithClass(value string) *Filter {
 	}
 	return &Filter{f}
 }
+
+// NewByAttribute search for any attribute that implement
+// the given Key with the given Value
+func NewByAttribute(key, value string) *Filter {
+	f := &baseFilter{}
+	f.name = "attribute " + key + " with " + value
+	f.MatchFunc = func(node *html.Node) bool {
+		for _, v := range node.Attr {
+			if key == v.Key && strings.Contains(v.Val, value) {
+				return true
+			}
+		}
+		return false
+	}
+	return &Filter{f}
+
+}
