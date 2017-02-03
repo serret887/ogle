@@ -47,7 +47,7 @@ func errorFilterCreator(matchers ...matcher.Matcher) error {
 	var b bytes.Buffer
 	b.WriteString("Problems Finding ")
 	for _, m := range matchers {
-		f := m.(*matcher.Filter)
+		f := m.(error)
 		b.WriteString(f.Error())
 		if len(matchers) > 1 {
 			b.WriteString(" with ")
