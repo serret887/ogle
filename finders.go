@@ -2,7 +2,6 @@ package ogle
 
 import (
 	"errors"
-	"fmt"
 
 	"bytes"
 
@@ -36,11 +35,6 @@ func walkDOM(node *html.Node, matchers ...matcher.Matcher) ([]*html.Node, error)
 
 func yesToProcess(n *html.Node, matchers ...matcher.Matcher) bool {
 	for _, m := range matchers {
-		//	fmt.Println(n.Data, m.Match(n))
-		for _, a := range n.Attr {
-			fmt.Println("attr")
-			fmt.Println(a.Key, a.Val, a.Namespace)
-		}
 		if m.Match(n) == false {
 
 			return false

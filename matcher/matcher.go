@@ -62,7 +62,6 @@ func NewWithClass(value string) *Filter {
 	f := &baseFilter{}
 	f.name = "class " + value
 	f.MatchFunc = func(node *html.Node) bool {
-		fmt.Print(node.FirstChild)
 		for _, v := range node.Attr {
 			if "class" == v.Key && strings.Contains(v.Val, value) {
 				return true

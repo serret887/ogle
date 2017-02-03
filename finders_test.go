@@ -30,20 +30,34 @@ var _ = Describe("Finders", func() {
 			Expect(err).To(BeNil())
 			Expect(len(actual)).To(Equal(3), "the amount of div should be 3")
 		})
-		FIt("Return all the nodes with class container", func() {
+		It("Return all the nodes with class container", func() {
 			m := matcher.NewWithClass("container")
 			actual, err := o.Find(m)
 			Expect(err).To(BeNil())
 			Expect(len(actual)).To(Equal(1), "Should only find one node")
 		})
 		It("Return all the nodes with class dog", func() {
+			m := matcher.NewWithClass("dog")
+			actual, err := o.Find(m)
+			Expect(err).To(BeNil())
+			Expect(len(actual)).To(Equal(3), "Should only find 3 node")
 
 		})
 
 		It("Return all the <div> with class container", func() {
-
+			m := matcher.NewWithClass("container")
+			mt := matcher.NewByTag(atom.Div)
+			actual, err := o.Find(m, mt)
+			Expect(err).To(BeNil())
+			Expect(len(actual)).To(Equal(1), "Should only find one node")
 		})
-		It("Return all the <div> with class dog", func() {
+		It("Return all the <div> with class red dog", func() {
+			m := matcher.NewWithClass("red")
+			md := matcher.NewWithClass("dog")
+			mt := matcher.NewByTag(atom.Div)
+			actual, err := o.Find(m, mt, md)
+			Expect(err).To(BeNil())
+			Expect(len(actual)).To(Equal(1), "Should only find one node")
 
 		})
 
