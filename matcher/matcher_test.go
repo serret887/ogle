@@ -15,9 +15,15 @@ var _ = Describe("Matcher/Matcher Is important to mention that thematcher are in
 	attributes := []html.Attribute{html.Attribute{Namespace: "class", Val: "goma", Key: "class"}, html.Attribute{Namespace: "event", Val: "function", Key: "onClick"}}
 	nodes := &html.Node{Type: html.ElementNode, DataAtom: atom.Div, Data: "hello", Attr: attributes}
 
+	Context("WithParent", func() {
+		It("Match any node that have a parent that satisfied a set of matchers", func() {
+			mp := matcher.WithParent(matcher.ByTag(atom.Div))
+		})
+	})
+
 	Context("Matcher WithClass", func() {
 		It("Match anything that have the class", func() {
-			m := matcher.NewWithClass("goma")
+			m := matcher.WithClass("goma")
 			Expect(m.Match(nodes)).To(Equal(true), "there is no \"goma\" class matching in this node")
 		})
 
@@ -31,11 +37,11 @@ var _ = Describe("Matcher/Matcher Is important to mention that thematcher are in
 	})
 	Context("Matcher ByTag", func() {
 		It("Return false if the matcher is not satisfied in the nodes", func() {
-			m := matcher.NewByTag(atom.A)
+			m := matcher.ByTag(atom.A)
 			Expect(m.Match(nodes)).To(Equal(false), "there is not tag in this node")
 		})
 		It("return true when the node  match ", func() {
-			m := matcher.NewByTag(atom.Div)
+			m := matcher.ByTag(atom.Div)
 			Expect(m.Match(nodes)).To(Equal(true), "there is tag in this node")
 		})
 	})

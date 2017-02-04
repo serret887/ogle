@@ -41,7 +41,7 @@ var _ = Describe("Finders", func() {
 	}
 	Context("First method", func() {
 		It("Return the first element that he found ", func() {
-			m := matcher.NewByTag(atom.Div)
+			m := matcher.ByTag(atom.Div)
 			actual, err := o.First(m)
 			Expect(err).To(BeNil())
 			Expect(actual).ToNot(BeNil(), "should only return one element")
@@ -51,7 +51,7 @@ var _ = Describe("Finders", func() {
 	// Context("Last Method", func() {
 	// 	It("Return the last element that implement the matcher", func() {
 	// 		m := matcher.NewByTag(atom.Div)
-	// 		actual, err := o.First(m)
+	// 		actual, err := o.Last(m)
 	// 		Expect(err).To(BeNil())
 	// 		Expect(actual).ToNot(BeNil(), "should only return one element")
 
@@ -77,25 +77,25 @@ var _ = Describe("Finders", func() {
 	Context("Find all the nodes with an specific MATCHER", func() {
 
 		It("Return an error if there is no match", func() {
-			m := matcher.NewByTag(atom.Action)
+			m := matcher.ByTag(atom.Action)
 			actual, err := o.Find(m)
 			Expect(actual).To(BeNil())
 			Expect("Problems Finding tag " + atom.Action.String()).To(BeEquivalentTo(err.Error()))
 		})
 		It("Return all the nodes with the <div> tag", func() {
-			m := matcher.NewByTag(atom.Div)
+			m := matcher.ByTag(atom.Div)
 			actual, err := o.Find(m)
 			Expect(err).To(BeNil())
 			Expect(len(actual)).To(Equal(3), "the amount of div should be 3")
 		})
 		It("Return all the nodes with class container", func() {
-			m := matcher.NewWithClass("container")
+			m := matcher.WithClass("container")
 			actual, err := o.Find(m)
 			Expect(err).To(BeNil())
 			Expect(len(actual)).To(Equal(1), "Should only find one node")
 		})
 		It("Return all the nodes with class dog", func() {
-			m := matcher.NewWithClass("dog")
+			m := matcher.WithClass("dog")
 			actual, err := o.Find(m)
 			Expect(err).To(BeNil())
 			Expect(len(actual)).To(Equal(3), "Should only find 3 node")
@@ -103,16 +103,16 @@ var _ = Describe("Finders", func() {
 		})
 
 		It("Return all the <div> with class container", func() {
-			m := matcher.NewWithClass("container")
-			mt := matcher.NewByTag(atom.Div)
+			m := matcher.WithClass("container")
+			mt := matcher.ByTag(atom.Div)
 			actual, err := o.Find(m, mt)
 			Expect(err).To(BeNil())
 			Expect(len(actual)).To(Equal(1), "Should only find one node")
 		})
 		It("Return all the <div> with class red dog", func() {
-			m := matcher.NewWithClass("red")
-			md := matcher.NewWithClass("dog")
-			mt := matcher.NewByTag(atom.Div)
+			m := matcher.WithClass("red")
+			md := matcher.WithClass("dog")
+			mt := matcher.ByTag(atom.Div)
 			actual, err := o.Find(m, mt, md)
 			Expect(err).To(BeNil())
 			Expect(len(actual)).To(Equal(1), "Should only find one node")

@@ -5,6 +5,8 @@ import (
 
 	"strings"
 
+	"bytes"
+
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -42,9 +44,30 @@ func (f *Filter) String() string {
 	return fmt.Sprint(f.name)
 }
 
-// NewByTag is a constructor for creating a filter that going to
+// WithParent is a function that can be pass to a ogle and
+// integrate some previus filter over the base of tags and attributes
+func WithParent(match ...Matcher) Matcher {
+	f := &baseFilter{}
+	var b bytes.Buffer
+	b.WriteString(" with parent ")
+	for _, v := range match {
+		b.WriteString(v.String())
+	}
+	f.MatchFunc = func(node *html.Node) bool {
+		for _, v := range match {
+			if !v.Match(node.Parent) {
+				return false
+			}
+
+		}
+		return true
+	}
+
+}
+
+// ByTag is a constructor for creating a filter that going to
 // filter anything containing the corresponding atom tag
-func NewByTag(a atom.Atom) *Filter {
+func ByTag(a atom.Atom) Matcher {
 	f := &baseFilter{}
 	f.name = "tag " + a.String()
 	f.MatchFunc = func(node *html.Node) bool {
@@ -56,10 +79,10 @@ func NewByTag(a atom.Atom) *Filter {
 	return &Filter{f}
 }
 
-// NewWithClass match any tag with a class with a stringis a constructor
+// WithClass match any tag with a class with a stringis a constructor
 // that return a filter that going to match if the node
 // pass to the match method implemet the specify class
-func NewWithClass(value string) *Filter {
+func WithClass(value string) Matcher {
 	f := &baseFilter{}
 	f.name = "class " + value
 	f.MatchFunc = func(node *html.Node) bool {
@@ -75,7 +98,7 @@ func NewWithClass(value string) *Filter {
 
 // NewByAttribute search for any attribute that implement
 // the given Key with the given Value
-func NewByAttribute(key, value string) *Filter {
+func NewByAttribute(key, value string) Matcher {
 	f := &baseFilter{}
 	f.name = "attribute " + key + " with " + value
 	f.MatchFunc = func(node *html.Node) bool {

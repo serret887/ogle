@@ -25,6 +25,13 @@ func (o *Ogle) First(matchers ...matcher.Matcher) (*html.Node, error) {
 	return n[0], err
 }
 
+// Last return the last match of the page is good and was implemented
+// for performance issues because some of the tags that you want are
+// inside the footer.
+// func (o *Ogle) Last(matchers ...matcher.Matcher) (*html.Node, error) {
+
+// }
+
 func walkDOM(node *html.Node, first bool, matchers ...matcher.Matcher) ([]*html.Node, error) {
 	result := []*html.Node{}
 	if yesToProcess(node, matchers...) {
