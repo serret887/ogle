@@ -18,6 +18,7 @@ type MatchFunc func(*html.Node) bool
 // a custom matcher you should implent this interface
 type Matcher interface {
 	Match(*html.Node) bool
+	fmt.Stringer
 }
 
 type baseFilter struct {
@@ -37,7 +38,7 @@ func (f *Filter) Match(n *html.Node) bool {
 	return f.MatchFunc(n)
 }
 
-func (f *Filter) Error() string {
+func (f *Filter) String() string {
 	return fmt.Sprint(f.name)
 }
 

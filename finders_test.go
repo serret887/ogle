@@ -12,18 +12,49 @@ import (
 	"golang.org/x/net/html/atom"
 )
 
-type myCustomTag struct {
+type falseMatch struct {
 	//a lot of different methods
 }
 
-func (m *myCustomTag) Match(node *html.Node) bool {
+func (m *falseMatch) Match(node *html.Node) bool {
+	return false
+}
+func (m *falseMatch) String() string {
+	return "tag"
+}
+
+type trueMatch struct {
+	//a lot of different methods
+}
+
+func (m *trueMatch) Match(node *html.Node) bool {
 	return true
+}
+func (m *trueMatch) String() string {
+	return "NO Problems"
 }
 
 var _ = Describe("Finders", func() {
 	Context("I can pass any object that implement the Matcher interface", func() {
+		o, err := ogle.New(strings.NewReader(htmlTest1))
+		if err != nil {
+			panic(err)
+		}
 
+		It("passing a custom object that return true for the matchers", func() {
+			mc := &trueMatch{}
+			actual, err := o.Find(mc)
+			Expect(err).To(BeNil())
+			Expect(len(actual)).To(Equal(22), "The amount of nodes in the html")
+		})
+		It("Return a proper error if there is nothing", func() {
+			mc := &falseMatch{}
+			actual, err := o.Find(mc)
+			Expect(actual).To(BeNil())
+			Expect("Problems Finding tag").To(BeEquivalentTo(err.Error()))
+		})
 	})
+
 	Context("Find all the nodes with an specific MATCHER", func() {
 		o, err := ogle.New(strings.NewReader(htmlTest1))
 		if err != nil {

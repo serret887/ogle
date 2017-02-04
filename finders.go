@@ -5,6 +5,8 @@ import (
 
 	"bytes"
 
+	"fmt"
+
 	"github.com/serret887/ogle/matcher"
 	"golang.org/x/net/html"
 )
@@ -47,8 +49,8 @@ func errorFilterCreator(matchers ...matcher.Matcher) error {
 	var b bytes.Buffer
 	b.WriteString("Problems Finding ")
 	for _, m := range matchers {
-		f := m.(error)
-		b.WriteString(f.Error())
+		f := m.(fmt.Stringer)
+		b.WriteString(f.String())
 		if len(matchers) > 1 {
 			b.WriteString(" with ")
 		}
