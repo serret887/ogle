@@ -35,11 +35,30 @@ func (m *trueMatch) String() string {
 }
 
 var _ = Describe("Finders", func() {
+	o, err := ogle.New(strings.NewReader(htmlTest1))
+	if err != nil {
+		panic(err)
+	}
+	Context("First method", func() {
+		It("Return the first element that he found ", func() {
+			m := matcher.NewByTag(atom.Div)
+			actual, err := o.First(m)
+			Expect(err).To(BeNil())
+			Expect(actual).ToNot(BeNil(), "should only return one element")
+		})
+	})
+
+	// Context("Last Method", func() {
+	// 	It("Return the last element that implement the matcher", func() {
+	// 		m := matcher.NewByTag(atom.Div)
+	// 		actual, err := o.First(m)
+	// 		Expect(err).To(BeNil())
+	// 		Expect(actual).ToNot(BeNil(), "should only return one element")
+
+	// 	})
+	// })
+
 	Context("I can pass any object that implement the Matcher interface", func() {
-		o, err := ogle.New(strings.NewReader(htmlTest1))
-		if err != nil {
-			panic(err)
-		}
 
 		It("passing a custom object that return true for the matchers", func() {
 			mc := &trueMatch{}
@@ -56,10 +75,6 @@ var _ = Describe("Finders", func() {
 	})
 
 	Context("Find all the nodes with an specific MATCHER", func() {
-		o, err := ogle.New(strings.NewReader(htmlTest1))
-		if err != nil {
-			panic(err)
-		}
 
 		It("Return an error if there is no match", func() {
 			m := matcher.NewByTag(atom.Action)

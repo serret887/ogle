@@ -13,20 +13,33 @@ import (
 
 // Find allwo to find nodes that match all the Matchers
 func (o *Ogle) Find(matchers ...matcher.Matcher) ([]*html.Node, error) {
-	return walkDOM(o.Node, matchers...)
+	return walkDOM(o.Node, false, matchers...)
 }
 
-func walkDOM(node *html.Node, matchers ...matcher.Matcher) ([]*html.Node, error) {
+//First Return the first node that match all the matchers passed
+func (o *Ogle) First(matchers ...matcher.Matcher) (*html.Node, error) {
+	n, err := walkDOM(o.Node, true, matchers...)
+	if err != nil {
+		return nil, err
+	}
+	return n[0], err
+}
+
+func walkDOM(node *html.Node, first bool, matchers ...matcher.Matcher) ([]*html.Node, error) {
 	result := []*html.Node{}
 	if yesToProcess(node, matchers...) {
 		result = append(result, node)
+		if first {
+			return result, nil
+		}
 	}
 
 	for n := node.FirstChild; n != nil; n = n.NextSibling {
-		found, err := walkDOM(n, matchers...)
-		if err == nil {
-			result = append(result, found...)
+		found, err := walkDOM(n, first, matchers...)
+		if err != nil {
+			continue
 		}
+		result = append(result, found...)
 
 	}
 	if len(result) < 1 {
