@@ -54,6 +54,9 @@ func WithParent(match ...Matcher) Matcher {
 		b.WriteString(v.String())
 	}
 	f.MatchFunc = func(node *html.Node) bool {
+		if node.Parent == nil {
+			return false
+		}
 		for _, v := range match {
 			if !v.Match(node.Parent) {
 				return false
@@ -62,12 +65,12 @@ func WithParent(match ...Matcher) Matcher {
 		}
 		return true
 	}
-
+	return &Filter{f}
 }
 
-// ByTag is a constructor for creating a filter that going to
+// WithTag is a constructor for creating a filter that going to
 // filter anything containing the corresponding atom tag
-func ByTag(a atom.Atom) Matcher {
+func WithTag(a atom.Atom) Matcher {
 	f := &baseFilter{}
 	f.name = "tag " + a.String()
 	f.MatchFunc = func(node *html.Node) bool {
