@@ -88,6 +88,12 @@ var _ = Describe("Finders", func() {
 			actual, err = o.Find(mt)
 			errorFailing("Problems Finding tag " + atom.Action.String())
 		})
+		It("Return an error if there is no match", func() {
+			mt = matcher.WithTag(atom.Action)
+			mc = matcher.WithClass("red1 dog")
+			actual, err = o.Find(mt, mc)
+			errorFailing("Problems Finding tag " + atom.Action.String() + " with class red1 dog")
+		})
 		It("Return all the nodes with the <div> tag", func() {
 			mt = matcher.WithTag(atom.Div)
 			actual, err := o.Find(mt)
@@ -111,6 +117,15 @@ var _ = Describe("Finders", func() {
 			Expect(len(actual)).To(Equal(1), "Should only find one node")
 			Expect(actual[0].DataAtom).To(Equal(atom.Div), "should be a div tag")
 			Expect(actual[0].Attr[0].Val).To(Equal("container"))
+		})
+		It("Joining two classes in the same function", func() {
+			mt = matcher.WithTag(atom.Div)
+			mc = matcher.WithClass("red dog")
+			actual, err := o.Find(mc, mt)
+			Expect(err).To(BeNil())
+			Expect(len(actual)).To(Equal(1), "Should only find one node")
+			Expect(actual[0].DataAtom).To(Equal(atom.Div), "should be a div tag")
+			Expect(actual[0].Attr[0].Val).To(Equal("red dog"))
 		})
 
 	})

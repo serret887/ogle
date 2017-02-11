@@ -68,10 +68,13 @@ func yesToProcess(n *html.Node, matchers ...matcher.Matcher) bool {
 func errorFilterCreator(matchers ...matcher.Matcher) error {
 	var b bytes.Buffer
 	b.WriteString("Problems Finding ")
+	count := 0
+	lenMatchers := len(matchers)
 	for _, m := range matchers {
 		f := m.(fmt.Stringer)
 		b.WriteString(f.String())
-		if len(matchers) > 1 {
+		count++
+		if count < lenMatchers {
 			b.WriteString(" with ")
 		}
 	}

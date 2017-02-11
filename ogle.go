@@ -23,6 +23,11 @@ func New(page io.Reader) (*Ogle, error) {
 	return ogle, err
 }
 
+// NewFromNode Ogle accepting a html Node for inside search in a fragment
+func NewFromNode(n *html.Node) *Ogle {
+	return &Ogle{n}
+}
+
 // Pretty make your HTML really Pretty
 func Pretty(page io.Reader) *bytes.Buffer {
 	token := html.NewTokenizer(page)
